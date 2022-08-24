@@ -12,11 +12,16 @@ const Color logoColor = Color(0xff2D2C2D);
 const Color subheadingColor = Color(0xff888888);
 const Color basePriceColor = Color(0xff888888);
 const Color currentPriceColor = Color(0xffC23D37);
+const Color imageCardColor = Color(0xffFBFAF9);
+const Color imageCardBorderColor = Color(0xfff4f3f1);
+const Color articleNameColor = Color(0xff888888);
 
 // const Color selectedBottomNavBarColor = Color(0xff)
 
 class ApiConstants {
-  static const String baseUrl = 'http://192.168.29.112:8080';
+  static const String baseUrl = 'http://localhost:8080';
+
+  // static const String baseUrl = 'http://192.168.29.112:8080';
   static const String homeUrl = '/home';
 }
 
@@ -78,7 +83,7 @@ class _HomePageState extends State<HomePage> {
     var url = Uri.parse(ApiConstants.baseUrl + ApiConstants.homeUrl);
     var res = await http.get(url);
     if (res.statusCode == 200) {
-      List<dynamic> data = jsonDecode(res.body);
+      List<dynamic> data = jsonDecode(res.body)['trends'];
       _trends = data.map((e) {
         List<dynamic> articlesObj = e['article'];
         List<Article> articles = articlesObj
@@ -129,20 +134,26 @@ class TrendWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: 382,
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [trendGradientStartColor, trendGradientEndColor],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter)),
         child: Column(children: [
           Container(
+              height: 72,
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [trendGradientStartColor, trendGradientEndColor],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter)),
               padding: const EdgeInsets.all(24),
               alignment: Alignment.centerLeft,
-              child: Text(trend.trendName ?? '')),
+              child: Text(
+                trend.trendName ?? '',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+              )),
+          const SizedBox(height: 4),
           SizedBox(
-            height: 226,
+            height: 256,
             child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: trend.articles
@@ -162,23 +173,51 @@ class ArticleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: 130,
-        child: Card(
-          child: InkWell(
-              child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child:Column(
-            children: [
-              Image.network("https://${article.imageLink!}",
-                      height: 160, fit: BoxFit.fill),
-              const SizedBox(height: 8),
-              Row(children: [
-                if(article.basePrice! > article.currentPrice!) Text(article.basePrice!.toString(), style: const TextStyle(fontSize: 12, color: basePriceColor, decoration: TextDecoration.lineThrough)),
-                Text('₹${article.currentPrice!}', style: const TextStyle(fontSize: 14, color: currentPriceColor),)
-              ],)
-            ],
-          ))),
-        ));
+      width: 130,
+      child: InkWell(
+          child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      decoration: BoxDecoration(
+                          color: imageCardColor,
+                          border: Border.all(color: imageCardBorderColor),
+                          borderRadius: BorderRadius.circular(4)),
+                      padding: const EdgeInsets.all(8),
+                      child: Image.network("https://${article.imageLink!}",
+                          fit: BoxFit.fill)),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      if (article.basePrice! > article.currentPrice!)
+                        Text('₹${article.basePrice!}',
+                            style: const TextStyle(
+                                fontSize: 12,
+                                color: basePriceColor,
+                                decoration: TextDecoration.lineThrough)),
+                      Text(
+                        '₹${article.currentPrice!}',
+                        style: const TextStyle(
+                            fontSize: 14,
+                            color: currentPriceColor,
+                            fontWeight: FontWeight.w600),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(article.brand!,
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w600)),
+                  Text(article.articleName!,
+                      style: const TextStyle(
+                          color: articleNameColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600))
+                ],
+              ))),
+    );
   }
 }
 
