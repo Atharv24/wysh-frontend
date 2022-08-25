@@ -12,10 +12,10 @@ void main() {
 const Color articleNameColor = Color(0xff888888);
 const Color backgroundColor = Color(0xffFFFEFE);
 const Color basePriceColor = Color(0xff888888);
+const Color blackColor = Color(0xff2D2C2D);
 const Color currentPriceColor = Color(0xffC23D37);
 const Color imageCardBorderColor = Color(0xfff4f3f1);
 const Color imageCardColor = Color(0xffFBFAF9);
-const Color blackColor = Color(0xff2D2C2D);
 const Color subheadingColor = Color(0xff888888);
 const Color trendGradientEndColor = Color(0xffFFFFFF);
 
@@ -24,9 +24,9 @@ const Color trendGradientStartColor = Color(0xffF9F6EF);
 // const Color selectedBottomNavBarColor = Color(0xff)
 
 class ApiConstants {
-  // static const String baseUrl = 'http://localhost:8080';
+  static const String baseUrl = 'http://localhost:8080';
 
-  static const String baseUrl = 'http://192.168.29.112:8080';
+  // static const String baseUrl = 'http://192.168.29.112:8080';
   static const String homeUrl = '/home';
 }
 
@@ -53,52 +53,52 @@ class ArticleCard extends StatelessWidget {
       child: GestureDetector(
           onTap: () => {},
           child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  decoration: BoxDecoration(
+                      color: imageCardColor,
+                      border: Border.all(color: imageCardBorderColor),
+                      borderRadius: BorderRadius.circular(4)),
+                  padding: const EdgeInsets.all(8),
+                  child: Image.network("https://${article.imageLink!}",
+                      fit: BoxFit.fill)),
+              const SizedBox(height: 8),
+              Row(
                 children: [
-                  Container(
-                      decoration: BoxDecoration(
-                          color: imageCardColor,
-                          border: Border.all(color: imageCardBorderColor),
-                          borderRadius: BorderRadius.circular(4)),
-                      padding: const EdgeInsets.all(8),
-                      child: Image.network("https://${article.imageLink!}",
-                          fit: BoxFit.fill)),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      if (article.basePrice! > article.currentPrice!)
-                        Text('₹${article.basePrice!}',
-                            style: const TextStyle(
-                                fontSize: 12,
-                                color: basePriceColor,
-                                fontWeight: FontWeight.w400,
-                                decoration: TextDecoration.lineThrough)),
-                      Text(
-                        '₹${article.currentPrice!}',
+                  if (article.basePrice! > article.currentPrice!)
+                    Text('₹${article.basePrice!}',
                         style: const TextStyle(
-                            fontSize: 14,
-                            color: currentPriceColor,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const Spacer(),
-                      SvgPicture.asset('./lib/assets/heart.svg', height: 20)
-                    ],
+                            fontSize: 12,
+                            color: basePriceColor,
+                            fontWeight: FontWeight.w400,
+                            decoration: TextDecoration.lineThrough)),
+                  Text(
+                    '₹${article.currentPrice!}',
+                    style: const TextStyle(
+                        fontSize: 14,
+                        color: currentPriceColor,
+                        fontWeight: FontWeight.w600),
                   ),
-                  const SizedBox(height: 2),
-                  Text(article.brand!,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: blackColor)),
-                  const SizedBox(height: 2),
-                  Text(article.articleName!,
-                      style: const TextStyle(
-                          color: articleNameColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600),
-                      overflow: TextOverflow.visible)
+                  const Spacer(),
+                  SvgPicture.asset('./lib/assets/heart.svg', height: 20)
                 ],
-              )),
+              ),
+              const SizedBox(height: 2),
+              Text(article.brand!,
+                  style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: blackColor)),
+              const SizedBox(height: 2),
+              Text(article.articleName!,
+                  style: const TextStyle(
+                      color: articleNameColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600),
+                  overflow: TextOverflow.visible)
+            ],
+          )),
     );
   }
 }
@@ -114,8 +114,12 @@ class HeaderWidget extends StatelessWidget {
             height: 32,
             child: Text(
               "WYSH",
-              style: GoogleFonts.inter(textStyle: const TextStyle(
-                color: blackColor, fontSize: 30, fontWeight: FontWeight.w900, letterSpacing: -3.15)),
+              style: GoogleFonts.inter(
+                  textStyle: const TextStyle(
+                      color: blackColor,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -3.15)),
               // style: TextStyle(
               //     color: blackColor, fontSize: 30, fontWeight: FontWeight.w900, fontFamily: GoogleFonts),
             )),
@@ -123,13 +127,13 @@ class HeaderWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
           child: Text(
-            "Keep scrolling to find all the latest trends from 10+ stores",
-            textAlign: TextAlign.center,
-            style: GoogleFonts.cabin(textStyle:const TextStyle(
-                color: subheadingColor,
-                fontWeight: FontWeight.w400,
-                fontSize: 16))
-          ),
+              "Keep scrolling to find all the latest trends from 10+ stores",
+              textAlign: TextAlign.center,
+              style: GoogleFonts.cabin(
+                  textStyle: const TextStyle(
+                      color: subheadingColor,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16))),
         ),
       ],
     );
@@ -189,17 +193,19 @@ class TrendWidget extends StatelessWidget {
       SizedBox(
         height: 276,
         child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              List<Widget> rowElements =  [
-                const SizedBox(width: 16), ArticleCard(article: trend.articles![index])
-              ];
-              if(index == trend.articles!.length - 1) {
-                rowElements.add(const SizedBox(width: 16));
-              }
-              return Row(children: rowElements);
-            },
-            itemCount: trend.articles?.length ?? 0,),
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            List<Widget> rowElements = [
+              const SizedBox(width: 16),
+              ArticleCard(article: trend.articles![index])
+            ];
+            if (index == trend.articles!.length - 1) {
+              rowElements.add(const SizedBox(width: 16));
+            }
+            return Row(children: rowElements);
+          },
+          itemCount: trend.articles?.length ?? 0,
+        ),
       ),
       Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
