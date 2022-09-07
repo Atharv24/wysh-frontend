@@ -43,13 +43,16 @@ class ArticleCard extends StatelessWidget {
                       border: Border.all(color: imageCardBorderColor),
                       borderRadius: BorderRadius.circular(4)),
                   padding: const EdgeInsets.all(8),
-                  child: Hero(
-                    tag: "ArticleImage",
-                    child: Image.network(article.imageUrl ?? "https://picsum.photos/400/500",
-                        // child: Image.network(widget.article.imageUrl!,
-                        fit: BoxFit.contain,
-                        height: 200,
-                        width: 160),
+                  child: Container(
+                    color: backgroundColor,
+                    child: Hero(
+                      tag: "ArticleImage",
+                      child: Image.network(article.imageUrl ?? "https://picsum.photos/400/500",
+                          // child: Image.network(widget.article.imageUrl!,
+                          fit: BoxFit.contain,
+                          height: 200,
+                          width: 160),
+                    ),
                   )),
               const SizedBox(height: 8),
               Row(
@@ -135,31 +138,42 @@ class ArticleDetailScreen extends StatelessWidget {
                   )
                 ],
               ),
-              const SizedBox(height: 24),
-              SizedBox(
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      primary: goToWebsiteColor,
-                      shape: const RoundedRectangleBorder(),
-                      minimumSize: const Size(double.infinity, double.infinity),
-                    ),
-                    child: const Text(
-                      "GO TO WEBSITE",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                          letterSpacing: 2),
-                    ),
-                  ))
+              const SizedBox(height: 32),
             ]),
           ),
         ]),
         const Positioned(top: 0, left: 0, child: BackTopBarButton()),
+        const Positioned(bottom: 16, left: 16, child: GoToWebsiteButton())
       ],
     );
+  }
+}
+
+class GoToWebsiteButton extends StatelessWidget {
+  const GoToWebsiteButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        height: 48,
+        width: MediaQuery.of(context).size.width - 32,
+        child: ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            elevation: 0, backgroundColor: goToWebsiteColor,
+            shape: const RoundedRectangleBorder(),
+            minimumSize: const Size(double.infinity, double.infinity),
+          ),
+          child: const Text(
+            "GO TO WEBSITE",
+            style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                letterSpacing: 2),
+          ),
+        ));
   }
 }
 

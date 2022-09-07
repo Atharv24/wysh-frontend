@@ -66,7 +66,7 @@ class TrendWidget extends StatelessWidget {
                       ))),
               style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(40),
-                  primary: blackColor,
+                  foregroundColor: blackColor,
                   side: const BorderSide(color: blackColor),
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.zero))),

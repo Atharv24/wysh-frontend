@@ -17,7 +17,7 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
 class HomeScreen extends StatelessWidget {
@@ -74,7 +74,7 @@ class WishlistScreen extends StatelessWidget {
   }
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   late List<Trend> _trends = [];
   int pageIndex = 0;
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
         List<dynamic> articlesObj = e['articles'];
         List<Article> articles = articlesObj
             .map((x) => Article(x['id'], x['title'], x['current_price'],
-                x['base_price'] + 1, x['brand'], null))
+                x['base_price'] + 1, x['brand'], x['image_url']))
             .toList();
         return Trend(e['id'], e['title'], articles);
       }).toList();
